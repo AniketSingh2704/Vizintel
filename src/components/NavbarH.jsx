@@ -1,51 +1,116 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
-import { Menu, X } from "lucide-react";
-import logo from "/photos/logo.png"; // Ensure the correct path
+import React, { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate(); // Initialize navigate function
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
-  const handleBack = () => {
-    navigate(-1);  // Goes back to the previous page
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
   };
 
+  const closeDropdown = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    // Attach the event listener to detect clicks outside the dropdown
+    document.addEventListener("mousedown", closeDropdown);
+    return () => {
+      // Clean up the event listener on component unmount
+      document.removeEventListener("mousedown", closeDropdown);
+    };
+  }, []);
+
   return (
-    <nav className="sticky top-0 flex justify-between items-center p-4 bg-purple-600 text-white shadow-lg z-10">
-      {/* Logo Section */}
-      <div className="flex items-center gap-2">
-        <img src={logo} alt="Company Logo" className="h-10" />
-        <h1 className="text-xl font-bold">VIZINTEL</h1>
-      </div>
+    <div className="relative">
+      {/* Navbar */}
+      <nav className="bg-black text-white sticky top-0 z-50 shadow-lg border-2px border-white">
 
-      {/* Desktop Menu */}
-      <div className="hidden md:flex gap-6">
-          <Link to="/" className="hover:text-white transition" onClick={() => setMenuOpen(false)}>Home</Link>
-          <Link to="/contact" className="hover:text-white transition" onClick={() => setMenuOpen(false)}>Contact</Link>
-          <Link to="/login" className="hover:text-white transition" onClick={() => setMenuOpen(false)}>Login</Link>
-          <Link to="/AdminLogin" className="hover:text-white transition" onClick={() => setMenuOpen(false)}>Admin Login</Link>
-      </div>
+        <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
+          {/* Logo */}
+          <div className="flex items-center">
+            <a href="/" className="flex items-center">
+              <img src="photos/logo.png" alt="Logo" className="h-10 w-10" />
+              <span className="text-orange-500 text-2xl font-bold ml-2">
+                VIZINTEL
+              </span>
+            </a>
+          </div>
 
-      {/* Hamburger Menu (Mobile) */}
-      <div className="md:hidden">
-        {menuOpen ? (
-          <X className="w-6 h-6 cursor-pointer" onClick={() => setMenuOpen(false)} />
-        ) : (
-          <Menu className="w-6 h-6 cursor-pointer" onClick={() => setMenuOpen(true)} />
-        )}
-      </div>
+          {/* Center Menu */}
+          <div className="flex space-x-6">
+            <a
+              href="/"
+              className="hover:text-orange-500 transition duration-300"
+            >
+              Home
+            </a>
+            <a
+              href="/about"
+              className="hover:text-orange-500 transition duration-300"
+            >
+              About
+            </a>
+            <a
+              href="/services"
+              className="hover:text-orange-500 transition duration-300"
+            >
+              Services
+            </a>
+            <a
+              href="/contact"
+              className="hover:text-orange-500 transition duration-300"
+            >
+              Contact
+            </a>
+          </div>
 
-      {/* Mobile Dropdown Menu */}
-      {menuOpen && (
-        <div className="md:hidden absolute top-16 left-0 w-full bg-purple-600 text-white p-4 flex flex-col gap-4 shadow-lg">
-          <Link to="/" className="hover:text-white transition" onClick={() => setMenuOpen(false)}>Home</Link>
-          <Link to="/contact" className="hover:text-white transition" onClick={() => setMenuOpen(false)}>Contact</Link>
-          <Link to="/login" className="hover:text-white transition" onClick={() => setMenuOpen(false)}>User Login</Link>
-          <Link to="/AdminLogin" className="hover:text-white transition" onClick={() => setMenuOpen(false)}>Admin Login</Link>
+          {/* Login Button */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={toggleDropdown}
+              className="bg-orange-500 text-white font-bold px-6 py-2 rounded-lg hover:bg-orange-600 transition duration-300"
+            >
+              Login
+            </button>
+
+            {isDropdownOpen && (
+              <motion.div
+                className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg w-full border border-gray-300"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+              >
+                {/* Dropdown Buttons */}
+                <button
+                  className="w-full bg-orange-500 text-white font-bold py-3 border-b rounded-t-lg hover:bg-orange-600 transition duration-300"
+                  onClick={() => {
+                    navigate("/Login");
+                    setIsDropdownOpen(false);
+                  }}
+                >
+                  User
+                </button>
+                <button
+                  className="w-full bg-orange-500 text-white font-bold py-3 rounded-b-lg hover:bg-orange-600 transition duration-300"
+                  onClick={() => {
+                    navigate("/AdminLogin");
+                    setIsDropdownOpen(false);
+                  }}
+                >
+                  Admin
+                </button>
+              </motion.div>
+            )}
+          </div>
         </div>
-      )}
-    </nav>
+      </nav>
+    </div>
   );
 };
 

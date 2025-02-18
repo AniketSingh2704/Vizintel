@@ -11,14 +11,27 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
+    "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.5.1",
     "@tailwindcss/vite": "^4.0.3",
     "axios": "^1.7.9",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "framer-motion": "^12.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.474.0",
+    "mongoose": "^8.9.6",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
     "react": "^18.3.1",
     "react-cookie": "^7.2.2",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
+    "react-icons": "^5.4.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.5",
     "redux-persist": "^6.0.0",
@@ -37,5 +50,18 @@
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
     "vite": "^6.0.5"
-  }
+  },
+  "description": "<<<<<<< HEAD\r # Vizintel\r =======\r >>>>>>> 5ba06fe (first commit)",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AniketSingh2704/Vizintel.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AniketSingh2704/Vizintel/issues"
+  },
+  "homepage": "https://github.com/AniketSingh2704/Vizintel#readme"
 }

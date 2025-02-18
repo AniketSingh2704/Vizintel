@@ -6,16 +6,33 @@ const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const passport = require("passport");
+const User = require("./models/User"); // ✅ Correct relative path
+
 
 // Initialize Express app
 const app = express();
-app.use(cors());
+
+require("./config/passport"); // Import Google OAuth configuration
+
+
+// Middleware
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookieParser());
 
-
-
+// Session management for Passport.js
+app.use(
+  session({
+    secret: "your-session-secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session())
 
 
 
@@ -30,7 +47,9 @@ mongoose
   .catch((err) => console.log("MongoDB Connection Error:", err));
 
 
-
+// Include authentication routes
+app.use("/api/auth", require("./routes/auth")); // Existing authentication routes
+app.use("/auth", require("./routes/auth")); // Google OAuth routes
 
 
 
@@ -43,7 +62,6 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true, minlength: 8 },
   schoolName: { type: String, required: true }, // Security question answer
 });
-const User = mongoose.model("User", userSchema);
 
 // Register User Route
 app.post("/api/auth/register", async (req, res) => {
